@@ -1,12 +1,28 @@
 import styled from 'styled-components';
+import backgroundImage from '../assets/background.jpg';
 
 export const AppContainer = styled.div`
-  padding: 20px 0;
-  width: 85%;
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  margin: 0 auto;
+  align-items: center;
+  min-height: 100vh; /* Isso garante que o card ocupe toda a altura da viewport */
+  background-image: url(${backgroundImage});
+  background-size: cover;
+  background-position: center;
+`;
+
+export const AppCard = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 800px;
+`;
+
+export const ScrollableList = styled.div`
+  max-height: 300px;
+  overflow-y: auto;
 `;
 
 export const Header = styled.header`
@@ -20,8 +36,15 @@ export const Header = styled.header`
 
 export const Title = styled.h2`
   font-weight: 600;
-  color: #343a40;
+  color: #282A2D;
   font-size: 30px;
+  margin: 0;
+`;
+
+export const Strong = styled.strong`
+  font-weight: 800;
+  color: #282A2D;
+  font-size: 50px;
   margin: 0;
 `;
 
@@ -51,7 +74,7 @@ export const Input = styled.input`
 export const Button = styled.button`
   width: 50%;
   height: 45px;
-  background-color: #80cb27;
+  background-color: #343A40;
   font-size: 16px;
   font-weight: 700;
   color: white;
@@ -82,4 +105,9 @@ export const FilterButton = styled.button`
   width: 100%;
   margin-left: 2px;
   cursor: pointer;
+   &.selected {
+    background-color: #282A2D   ;
+    color: white;
+    border-color: #282A2D ;
+  }
 `;

@@ -1,12 +1,12 @@
-import React from 'react';
-import { ITask } from '../interfaces';
-import { Card, Actions, Checkbox, DeleteButton, TaskText } from './styles'; // Certifique-se de que o caminho esteja correto
+import React from "react";
+import { ITask } from "../interfaces";
+import { Card, Actions, Checkbox, DeleteButton, TaskText } from "./styles";
 
 interface TaskProps {
   task: ITask;
-  completed: boolean; // Adicionando a propriedade completed
-  deleteTask(DeleteTaskById: number): void;
-  toggleComplete(): void; // Função para alternar o estado de conclusão
+  completed: boolean;
+  deleteTask: (taskId: number) => void;
+  toggleComplete: () => void;
 }
 
 function TodoTask({ task, completed, deleteTask, toggleComplete }: TaskProps) {
@@ -22,7 +22,15 @@ function TodoTask({ task, completed, deleteTask, toggleComplete }: TaskProps) {
           checked={completed}
           onChange={toggleComplete}
         />
-        <DeleteButton onClick={() => deleteTask(task.id)}>X</DeleteButton>
+        {!completed && (
+          <DeleteButton
+            as="button"
+            onClick={() => deleteTask(task.id)}
+            disabled={completed}
+          >
+            X
+          </DeleteButton>
+        )}
       </Actions>
     </Card>
   );
