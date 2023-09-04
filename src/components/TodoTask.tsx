@@ -1,17 +1,23 @@
-import React from 'react';
-import { ITask } from '../interfaces';
-import { Card, Actions, Checkbox, DeleteButton, TaskText } from './styles'; // Certifique-se de que o caminho esteja correto
+import React from "react";
+import { ITask } from "../interfaces";
+import { Card, Actions, Checkbox, DeleteButton, TaskText } from "./styles";
+import { useTaskContext } from "../context/TaskContext";
 
 interface TaskProps {
   task: ITask;
-  completed: boolean; // Adicionando a propriedade completed
-  deleteTask(DeleteTaskById: number): void;
-  toggleComplete(): void; // Função para alternar o estado de conclusão
 }
 
-function TodoTask({ task, completed, deleteTask, toggleComplete }: TaskProps) {
+function TodoTask({ task }: TaskProps) {
+  const {
+    deleteTask,
+    toggleComplete,
+    completedTasks,
+  } = useTaskContext();
+
+  const isCompleted = completedTasks[task.id] || false;
+
   return (
-    <Card completed={completed}>
+    <Card completed={isCompleted}>
       <div>
         <TaskText>{task.nameTask}</TaskText>
       </div>
@@ -19,10 +25,18 @@ function TodoTask({ task, completed, deleteTask, toggleComplete }: TaskProps) {
       <Actions>
         <Checkbox
           type="checkbox"
-          checked={completed}
-          onChange={toggleComplete}
+          checked={isCompleted}
+          onChange={() => toggleComplete(task.id)}
         />
-        <DeleteButton onClick={() => deleteTask(task.id)}>X</DeleteButton>
+        {!isCompleted && (
+          <DeleteButton
+            as="button"
+            onClick={() => deleteTask(task.id)}
+            disabled={isCompleted}
+          >
+            X
+          </DeleteButton>
+        )}
       </Actions>
     </Card>
   );
