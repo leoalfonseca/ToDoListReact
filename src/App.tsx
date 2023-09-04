@@ -1,6 +1,6 @@
+import React, { useState } from "react";
 import TodoTask from "./components/TodoTask";
-import { ITask } from "./interfaces";
-import { useState } from "react";
+import { useTaskContext } from "./context/TaskContext";
 import {
   AppContainer,
   AppCard,
@@ -22,16 +22,20 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [task, setTask] = useState<string>("");
-  const [todoList, setTodoList] = useState<ITask[]>([]);
-  const [completedTasks, setCompletedTasks] = useState<{
-    [key: number]: boolean;
-  }>({});
-  const [selectedFilter, setSelectedFilter] = useState<
-    "all" | "active" | "completed"
-  >("all");
+
+  // Use o useTaskContext para acessar o contexto
+  const {
+    todoList,
+    completedTasks,
+    selectedFilter,
+    addTask,
+    setFilter,
+  } = useTaskContext();
+
   const countCompletedTasks = todoList.filter(
     (task) => completedTasks[task.id]
   ).length;
+
   const countAllTasks = todoList.length;
   const countPendingTasks = countAllTasks - countCompletedTasks;
 
@@ -44,7 +48,7 @@ function App() {
     return true;
   });
 
-  function addTask(): void {
+  const handleAddTask = () => {
     if (task.trim() === "") {
       // Exibir um toast de erro
       toast.error("Por favor, insira uma tarefa válida.");
@@ -57,32 +61,13 @@ function App() {
       return;
     }
 
-    const idRandom = (num: number) => Math.floor(Math.random() * num);
-    const newTask = { id: idRandom(1000), nameTask: task };
-
-    setTodoList([...todoList, newTask]);
-
-    setCompletedTasks((prevCompletedTasks) => {
-      return { ...prevCompletedTasks, [newTask.id]: false };
-    });
+    addTask(task); // Chama a função addTask do contexto
 
     setTask("");
 
     // Exibir um toast de sucesso
     toast.success("Tarefa adicionada com sucesso!");
-  }
-
-  function deleteTask(DeleteTaskById: number): void {
-    setTodoList(todoList.filter((task) => task.id !== DeleteTaskById));
-    setCompletedTasks((prevCompletedTasks) => {
-      const updatedCompletedTasks = { ...prevCompletedTasks };
-      delete updatedCompletedTasks[DeleteTaskById];
-      return updatedCompletedTasks;
-    });
-
-    // Exibir um toast de erro
-    toast.error("Tarefa excluída!");
-  }
+  };
 
   return (
     <>
@@ -92,7 +77,7 @@ function App() {
           <ToastContainer autoClose={2000} />
           <Header>
             <Title>
-              <Strong>ToDo</Strong> List
+              <Strong>ToDo</Strong>List
             </Title>
             <Container>
               <Input
@@ -103,7 +88,7 @@ function App() {
                 value={task}
                 onChange={(event) => setTask(event.target.value)}
               />
-              <Button onClick={addTask}>Adicionar tarefa</Button>
+              <Button onClick={handleAddTask}>Adicionar tarefa</Button>
             </Container>
           </Header>
 
@@ -112,19 +97,19 @@ function App() {
           <FilterButtons>
             <FilterButton
               className={selectedFilter === "all" ? "selected" : ""}
-              onClick={() => setSelectedFilter("all")}
+              onClick={() => setFilter("all")} // Chama a função setFilter do contexto
             >
               Todos ({countAllTasks})
             </FilterButton>
             <FilterButton
               className={selectedFilter === "active" ? "selected" : ""}
-              onClick={() => setSelectedFilter("active")}
+              onClick={() => setFilter("active")} // Chama a função setFilter do contexto
             >
               Pendentes ({countPendingTasks})
             </FilterButton>
             <FilterButton
               className={selectedFilter === "completed" ? "selected" : ""}
-              onClick={() => setSelectedFilter("completed")}
+              onClick={() => setFilter("completed")} // Chama a função setFilter do contexto
             >
               Concluídos ({countCompletedTasks})
             </FilterButton>
@@ -134,14 +119,6 @@ function App() {
               <TodoTask
                 key={task.id}
                 task={task}
-                completed={completedTasks[task.id] || false}
-                deleteTask={deleteTask}
-                toggleComplete={() =>
-                  setCompletedTasks((prevCompletedTasks) => ({
-                    ...prevCompletedTasks,
-                    [task.id]: !prevCompletedTasks[task.id],
-                  }))
-                }
               />
             ))}
           </ScrollableList>

@@ -1,4 +1,5 @@
 export interface ITask {
   id: number,
-  nameTask: string
+  nameTask: string,
+  completed: string
 }

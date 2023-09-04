@@ -32,23 +32,23 @@ export const Checkbox = styled.input`
   border: 2px solid #000;
   border-radius: 4px;
   outline: none;
-  position: relative; /* Adicione esta propriedade */
+  position: relative;
   transition: 0.2s;
 
   &:checked::before {
     content: "✔";
     display: block;
-    position: absolute; /* Coloque o check em posição absoluta */
-    top: 50%; /* Centralize verticalmente */
-    left: 50%; /* Centralize horizontalmente */
-    transform: translate(-50%, -50%); /* Centralize completamente */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 12px;
     color: white;
   }
 
   &:checked {
-    background-color: #343A40;
-    border-color: #343A40;
+    background-color: #334465;
+    border-color: #334465;
   }
 
   &:hover {
@@ -59,14 +59,14 @@ export const Checkbox = styled.input`
 export const DeleteButton = styled.span`
   cursor: pointer;
   text-align: center;
-  color: #b6b6b7;
+  color: #00000;
   background-color: #fff;
   font-size: 14px;
 `;
 
 export const TaskText = styled.p`
   font-size: 16px;
-  color: #9f9fa8;
+  color: #00000;
   font-weight: 600;
 `;
 
